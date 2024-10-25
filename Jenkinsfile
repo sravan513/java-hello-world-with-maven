@@ -41,10 +41,10 @@ pipeline {
     }
 
     post {
-        always {
+        //always {
             // Clean up workspace
-            cleanWs()
-        }
+            //cleanWs()
+       // }
         success {
             echo "Build and Docker stages completed successfully."
         }
