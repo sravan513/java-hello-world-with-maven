@@ -1,15 +1,54 @@
-pipeline{
+pipeline {
     agent any
-      stages{
-        stage('checkout'){
-            steps{
-                checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: '4afa7c45-845d-4a33-a81b-debf490a13e3', url: 'https://github.com/sravan513/java-hello-world-with-maven.git']]])
+
+    environment {
+        DOCKER_IMAGE = "namespace/myimagesrepo1"
+        DOCKER_REGISTRY_CREDENTIALS = 'd188f597-dd8a-44a4-9998-e4ca1c05ed63'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout source code
+                checkout scm
             }
         }
-        stage('build'){
-            steps{
-               sh 'mvn clean install'
+        
+        stage('Maven Build') {
+            steps {
+                script {
+                    // Maven build: clean, compile, test, and package
+                    sh 'mvn clean package'
+                }
             }
+        }
+
+        stage('Docker Build & Push') {
+            steps {
+                script {
+                    // Build Docker image using Dockerfile in the root directory
+                      echo "Docker Image check....!."
+                    sh "docker build -t ${DOCKER_IMAGE}:${env.BUILD_ID} ."
+
+                    // Login and push to Docker registry if desired
+                    docker.withRegistry('', DOCKER_REGISTRY_CREDENTIALS) {
+                        sh "docker push ${DOCKER_IMAGE}:${env.BUILD_ID}"
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up workspace
+            cleanWs()
+        }
+        success {
+            echo "Build and Docker stages completed successfully."
+        }
+        failure {
+            echo "Build or Docker stages failed."
         }
     }
 }
