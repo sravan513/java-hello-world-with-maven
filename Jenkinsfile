@@ -33,6 +33,7 @@ pipeline {
                     // Login and push to Docker registry if desired
                     docker.withRegistry('', DOCKER_REGISTRY_CREDENTIALS) {
                         sh "docker push ${DOCKER_IMAGE}:${env.BUILD_ID}"
+                        echo "Docker Image check222....!."
                     }
                 }
             }
