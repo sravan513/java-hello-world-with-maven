@@ -28,12 +28,12 @@ pipeline {
                 script {
                     // Build Docker image using Dockerfile in the root directory
                       echo "Docker Image check....!."
-                    sh "docker build -t ${DOCKER_IMAGE}:${env.BUILD_ID} ."
+                    sh "sudo docker build -t ${DOCKER_IMAGE}:${env.BUILD_ID} ."
                     echo "Docker Image check111....!."
 
                     // Login and push to Docker registry if desired
                     docker.withRegistry('', DOCKER_REGISTRY_CREDENTIALS) {
-                        sh "docker push ${DOCKER_IMAGE}:${env.BUILD_ID}"
+                        sh "sudo docker push ${DOCKER_IMAGE}:${env.BUILD_ID}"
                         echo "Docker Image check222....!."
                     }
                 }
