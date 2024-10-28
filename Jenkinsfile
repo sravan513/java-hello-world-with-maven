@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "namespace/myimagesrepo1"
-        DOCKER_REGISTRY_CREDENTIALS = 'd188f597-dd8a-44a4-9998-e4ca1c05ed63'
+        DOCKER_IMAGE = "name/sravanecr"
+        DOCKER_REGISTRY_CREDENTIALS = '0cd5aeaf-f787-42a2-934c-4c3f11c330b4'
     }
 
     stages {
