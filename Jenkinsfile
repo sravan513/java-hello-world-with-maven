@@ -33,7 +33,8 @@ pipeline {
 
                     // Login and push to Docker registry if desired
                     docker.withRegistry('', DOCKER_REGISTRY_CREDENTIALS) {
-                        sh "sudo docker push ${DOCKER_IMAGE}:${env.BUILD_ID}"
+                        //sh "sudo docker push ${DOCKER_IMAGE}:${env.BUILD_ID}"
+                          sh docker pull memcached
                         echo "Docker Image check222....!."
                     }
                 }
