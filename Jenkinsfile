@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "https://hub.docker.com/_/memcached"
-        DOCKER_REGISTRY_CREDENTIALS = '836d48b9-61bd-4f08-b9bd-fd361ae34d8f'
+        DOCKER_IMAGE = "name/sravanecr"
+        DOCKER_REGISTRY_CREDENTIALS = '9efeaf6b-4199-4148-be24-8e9ffdb27acf'
     }
 
     stages {
