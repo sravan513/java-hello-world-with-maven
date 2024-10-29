@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the JAR file from the previous build stage
-COPY /target/jb-hello-world-maven-0.2.0.jar /app/
+COPY /target/jb-hello-world-maven-0.2.0.jar ./
 
 # Expose the port that your application runs on (if applicable)
 EXPOSE 8080
