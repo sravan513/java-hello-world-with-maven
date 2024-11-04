@@ -1,58 +1,53 @@
 pipeline {
-   //tools {
-     //   maven 'Maven'
-    //}
-    agent {label 'slave-node-label'}
+    agent any
+
     environment {
-        registry = "<account_id>.dkr.ecr.us-east-1.amazonaws.com/test-repo"
+        DOCKER_IMAGE = "557690598346.dkr.ecr.us-east-1.amazonaws.com/test-repo"
+        DOCKER_REGISTRY_CREDENTIALS = 'docker-credentials-id'
     }
-    
+
     stages {
-        stage('checkout') {
+        stage('Checkout') {
             steps {
-               // Checkout source code
+                // Checkout source code
                 checkout scm
-                //checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: '<https://github.com/sravan513/java-hello-world-with-maven.git>']]])     
-            }
-        }
-        stage ('Build') {
-          steps {
-            sh 'mvn clean install'           
             }
         }
         
-            // Building Docker images
-        stage('Building image') {
-          steps{
-            script {
-              sh 'docker build -t $JOB_NAME:v1.$BUILD_ID .'
-              sh 'docker tag $JOB_NAME:v1.$BUILD_ID ${registry}:v1.$BUILD_ID'
-             }
-           }
-         }
-   
-    // Uploading Docker images into AWS ECR
-       stage('Pushing to ECR') {
-         steps{  
-           script {
-             sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <account_id>.dkr.ecr.us-east-1.amazonaws.com' 
-             sh 'docker push ${registry}:v1.$BUILD_ID'
-             sh 'docker rmi $JOB_NAME:v1.$BUILD_ID ${registry}:v1.$BUILD_ID' // Delete docker images from server 
-           }
-          }
-         }
-       
-      // stage('K8S Deploy') {
-       //steps{   
-        // script {
-           // withKubeConfig([credentialsId: 'kubeconfig', serverUrl: '']) {
-            //  sh '<put the below line marked with **>'
-             // sh 'chmod u+x ./kubectl'
-             // sh 'envsubst < eks-deploy-k8s.yaml > eks-deploy-k8s1.yaml'
-             // sh './kubectl apply -f eks-deploy-k8s.yaml'
-            // }
-           //}
-        //}
-       //}
+        stage('Maven Build') {
+            steps {
+                script {
+                    // Maven build: clean, compile, test, and package
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
+        stage('Docker Build & Push') {
+            steps {
+                script {
+                    // Build Docker image using Dockerfile in the root directory
+                    sh "docker build -t ${DOCKER_IMAGE}:${env.BUILD_ID} ."
+
+                    // Login and push to Docker registry if desired
+                    docker.withRegistry('', DOCKER_REGISTRY_CREDENTIALS) {
+                        sh "docker push ${DOCKER_IMAGE}:${env.BUILD_ID}"
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up workspace
+            cleanWs()
+        }
+        success {
+            echo "Build and Docker stages completed successfully."
+        }
+        failure {
+            echo "Build or Docker stages failed."
+        }
     }
 }
