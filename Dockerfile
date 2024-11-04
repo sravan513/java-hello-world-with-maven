@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the JAR file from the previous build stage
- COPY /var/lib/jenkins/workspace/mytestjavapipelineproject1/target/jb-hello-world-maven-0.2.0.jar ./var/lib/jenkins/.m2/repository/org/springframework/jb-hello-world-maven/0.2.0/jb-hello-world-maven-0.2.0.jar
+ COPY /var/lib/jenkins/workspace/mytestjavapipelineproject1/target/jb-hello-world-maven-0.2.0.jar ./var/lib/jenkins/.m2/repository/org/springframework/jb-hello-world-maven/0.2.0/jb-hello-world-maven-0.2.0.jar:
 //COPY /target/jb-hello-world-maven-0.2.0.jar ./
 
 # Expose the port that your application runs on (if applicable)
