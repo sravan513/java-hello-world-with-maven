@@ -1,7 +1,7 @@
 pipeline {
-   tools {
-        maven 'Maven'
-    }
+   //tools {
+     //   maven 'Maven'
+    //}
     agent {label 'slave-node-label'}
     environment {
         registry = "<account_id>.dkr.ecr.us-east-1.amazonaws.com/test-repo"
