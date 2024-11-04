@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the JAR file from the previous build stage
-// COPY /var/lib/jenkins/workspace/demo-pipeline/target/jb-hello-world-maven-0.2.0.jar ./WORKDIR/app
+# COPY /var/lib/jenkins/workspace/demo-pipeline/target/jb-hello-world-maven-0.2.0.jar ./WORKDIR/app
 
 # Expose the port that your application runs on (if applicable)
 EXPOSE 8080
