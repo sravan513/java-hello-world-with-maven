@@ -8,9 +8,11 @@ pipeline {
     }
     
     stages {
-        stage('Cloning Git') {
+        stage('checkout') {
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: '<https://github.com/sravan513/java-hello-world-with-maven.git>']]])     
+               // Checkout source code
+                checkout scm
+                //checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: '<https://github.com/sravan513/java-hello-world-with-maven.git>']]])     
             }
         }
         stage ('Build') {
